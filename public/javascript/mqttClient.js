@@ -3,7 +3,7 @@
  *********************************************************/
 MQTT_BROKER = '192.168.0.169';
 MQTT_PORT = 9001;
-MQTT_CLIENTID = 'WebClient';
+MQTT_CLIENTID = 'WebClient' + parseInt(Math.random() * 100);
 MQTT_USERNAME = 'lukhas';
 MQTT_PASSWORD = 'Chilldeinleben1';
 
@@ -57,7 +57,7 @@ function onMessageArrived(message) {
         ledStateArrived(message.payloadString);
       break;
   }
-  console.log("Message arrived [" + message.destinationName + "]:\t\t" + message.payloadString);
+  console.log("Message arrived [" + message.destinationName + "]:\t" + message.payloadString);
 }
 
 
