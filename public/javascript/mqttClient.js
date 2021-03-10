@@ -49,6 +49,8 @@ var sliderBrightness = document.getElementById("slider-brightness");
 
 // wheel color picker
 var colorPicker = document.getElementById("color-block");
+var colorPickerPB = document.getElementById("color-picker-pb");
+
 
 // led borders
 /* var ledRangeMin = document.getElementById("led-range-min");
@@ -160,6 +162,7 @@ function ledBrightnessArrived(payload){
 
 function ledColorArrived(payload){
   colorPicker.value = payload;
+  colorPickerPB.classList("background-color", colorPicker.value);
 }
 
 function ledRangeMinArrived(payload){
