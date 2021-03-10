@@ -162,7 +162,7 @@ function ledBrightnessArrived(payload){
 
 function ledColorArrived(payload){
   colorPicker.value = payload;
-  colorPickerPB.classList("background-color", colorPicker.value);
+  /* colorPickerPB.css("background-color", colorPicker.value); */
 }
 
 function ledRangeMinArrived(payload){
