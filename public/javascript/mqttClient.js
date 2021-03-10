@@ -51,11 +51,11 @@ var sliderBrightness = document.getElementById("slider-brightness");
 var colorPicker = document.getElementById("color-block");
 
 // led borders
-var ledRangeMin = document.getElementById("led-range-min");
+/* var ledRangeMin = document.getElementById("led-range-min");
 var ledRangeMax = document.getElementById("led-range-max");
 
 initRange1(ledRangeMin);
-initRange2(ledRangeMax);
+initRange2(ledRangeMax); */
 
 /*********************************************************
  * Event Handler
@@ -82,13 +82,13 @@ colorPicker.oncolorchange = function(){
   publish(topic.BALKON_LED_COLOR, colorPicker.value);
 };
 
-// led border
+/* // led border
 ledRangeMin.oninput = function(){
   publish(topic.BALKON_LED_RANGEMIN, ledRangeMin.value);
 };
 ledRangeMax.oninput = function(){
   publish(topic.BALKON_LED_RANGEMAX, ledRangeMax.value);
-};
+}; */
 
 /*********************************************************
  * MQTT Functions
@@ -173,7 +173,7 @@ function ledRangeMaxArrived(payload){
 /*********************************************************
  * Initizialistation
  *********************************************************/
-function initRange1(document){
+/* function initRange1(document){
   document.value=Math.min(document.value,document.parentNode.childNodes[5].value-1);
   var value=(100/(parseInt(document.max)-parseInt(document.min)))*parseInt(document.value)-(100/(parseInt(document.max)-parseInt(document.min)))*parseInt(document.min);
   var children = document.parentNode.childNodes[1].childNodes;
@@ -205,4 +205,4 @@ function sliderDistanceOnChange(){
   document.getElementById("value1") = 30;
   document.getElementById("sign2").style = "left:60%;";
   document.getElementById("value2") = 60;
-}
+} */
