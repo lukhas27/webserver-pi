@@ -9,21 +9,22 @@ MQTT_PASSWORD = 'Chilldeinleben1';
 
 // definition of topics
 const topic= {
-  BALKON_LED_STATE: "balkon/leds/state",
-  BALKON_LED_COLOR: "balkon/leds/color",
-  BALKON_LED_BRIGHTNESS: "balkon/leds/brightness",
-  BALKON_LED_RANGEMIN: "balkon/leds/borders/min",
-  BALKON_LED_RANGEMAX: "balkon/leds/borders/max"
+  BALKON_LEDS_STATE: "balkon/leds/state",
+  BALKON_LEDS_COLOR: "balkon/leds/color",
+  BALKON_LEDS_BRIGHTNESS: "balkon/leds/brightness",
+  BALKON_LEDS_RANGEMIN: "balkon/leds/range/min",
+  BALKON_LEDS_RANGEMAX: "balkon/leds/range/max",
+  BALKON_LEDS_STATUS: "balkon/leds/status"
 };
 
 // topic array for subscribing topics
 const subTopics = 
 [
-  topic.BALKON_LED_STATE,
-  topic.BALKON_LED_COLOR,
-  topic.BALKON_LED_BRIGHTNESS,
-  topic.BALKON_LED_RANGEMIN,
-  topic.BALKON_LED_RANGEMAX
+  topic.BALKON_LEDS_STATE,
+  topic.BALKON_LEDS_COLOR,
+  topic.BALKON_LEDS_BRIGHTNESS,
+  topic.BALKON_LEDS_RANGEMIN,
+  topic.BALKON_LEDS_RANGEMAX
 ];
 
 // create a client instance
@@ -66,25 +67,25 @@ initRange2(ledRangeMax); */
 // switch OnOff
 switchOnOff.onchange = function(){
   if (switchOnOff.checked){
-    publish(topic.BALKON_LED_STATE, "on");
+    publish(topic.BALKON_LEDS_STATE, "on");
   }
   else {
-    publish(topic.BALKON_LED_STATE, "off");
+    publish(topic.BALKON_LEDS_STATE, "off");
   }
 };
 
 // slider brightness
 sliderBrightness.oninput = function(){
   // publish
-  publish(topic.BALKON_LED_BRIGHTNESS, sliderBrightness.value);
+  publish(topic.BALKON_LEDS_BRIGHTNESS, sliderBrightness.value);
 };
 
 // color picker
 colorPicker.oncolorchange = function(){
-  publish(topic.BALKON_LED_COLOR, colorPicker.value);
+  publish(topic.BALKON_LEDS_COLOR, colorPicker.value);
 };
 
-/* // led border
+/* // led range
 ledRangeMin.oninput = function(){
   publish(topic.BALKON_LED_RANGEMIN, ledRangeMin.value);
 };
@@ -103,6 +104,9 @@ function onConnect() {
     client.subscribe(subTopics[i], {qos:2});
     console.log("Subscribed to topic:\t" + subTopics[i]);
   }
+
+  // get actual status of LEDs
+  publish(topic.BALKON_LEDS_STATUS, "request");
 }
 
 // called when the client loses its connection
@@ -115,13 +119,13 @@ function onConnectionLost(responseObject) {
 // called when a message arrives
 function onMessageArrived(message) {
   switch (message.destinationName){
-    case topic.BALKON_LED_STATE:
+    case topic.BALKON_LEDS_STATE:
         ledStateArrived(message.payloadString);
       break;
-    case topic.BALKON_LED_BRIGHTNESS:
+    case topic.BALKON_LEDS_BRIGHTNESS:
         ledBrightnessArrived(message.payloadString);
       break;
-    case topic.BALKON_LED_COLOR:
+    case topic.BALKON_LEDS_COLOR:
         ledColorArrived(message.payloadString);
       break;
   }
