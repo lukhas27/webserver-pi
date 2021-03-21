@@ -1,108 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="javascript/paho-mqtt/paho-mqtt.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script type="text/javascript" src="javascript/wheelcolor-picker/jquery.wheelcolorpicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/wheelcolorpicker.dark.css"/>
-        <link rel="stylesheet" type="text/css" href="css/rangeSlider.css">
-        <link rel="stylesheet" type="text/css" href="css/toggleOnOff.css">
-        <link rel="stylesheet" type="text/css" href="css/rangeSlider2Point.css">
-        <title>MQTT Control</title>
-    </head>
 
-    <body>
-        <div class = "toggleOnOff">
-            <h4>
-                Choose LED Stripe Borders
-            </h4>
-            <label class="switch">
-                <input class="switch-input" type="checkbox" id="switch-OnOff"/>
-                <span class="switch-label" data-on="On" data-off="Off"></span> 
-                <span class="switch-handle"></span> 
-            </label>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="javascript/paho-mqtt/paho-mqtt.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="javascript/wheelcolor-picker/jquery.wheelcolorpicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/wheelcolorpicker.css" />
+    <link rel="stylesheet" type="text/css" href="css/rangeSlider.css">
+    <link rel="stylesheet" type="text/css" href="css/rangeSlider2Point.css">
+    <link rel="stylesheet" type="text/css" href="css/toggleOnOff.css">
+    <link rel="stylesheet" type="text/css" href="css/rangeSlider2Point.css">
+    <title>MQTT Control</title>
+</head>
+
+<body>
+    <div class="toggleOnOff">
+        <h4>
+            Toggle LEDs
+        </h4>
+        <label class="switch">
+            <input class="switch-input" type="checkbox" id="switch-OnOff" />
+            <span class="switch-label" data-on="On" data-off="Off"></span>
+            <span class="switch-handle"></span>
+        </label>
+    </div>
+
+    <div class="brightness">
+        <h4>
+            Brightness
+        </h4>
+        <input type="range" min="0" max="100" value="50" class="slider" id="slider-brightness">
+    </div>
+
+    <div class="wheelcolorpicker">
+        <h4>
+            Color
+        </h4>
+        <input type="text" data-wheelcolorpicker="" data-wcp-sliders="wv" data-wcp-preview="true" id="color-block">
+        <span class="color-preview-box"></span>
+    </div>
+
+    <div class="leds-range">
+        <br>
+        <div>
+            <h4> LEDs Range</h4>
         </div>
-
-        <div class="brightness">
-            <h4>
-                Brightness
-            </h4>
-            <input type="range" min="0" max="100" value="50" class="slider" id="slider-brightness">
+        <div slider id="slider-distance">
+          <div>
+            <div inverse-left style="width:70%;"></div>
+            <div inverse-right style="width:70%;"></div>
+            <div range style="left:0%;right:0%;"></div>
+            <span thumb style="left:0%;"></span>
+            <span thumb style="left:100%;"></span>
+            <div sign style="left:0%;">
+              <span id="value">0</span>
+            </div>
+            <div sign style="left:100%;">
+              <span id="value">29</span>
+            </div>
+          </div>
+          <input type="range" tabindex="0" value="0" max="29" min="0" step="1" id="range-min"/>
+         
+          <input type="range" tabindex="0" value="29" max="29" min="0" step="1" id="range-max"/>
         </div>
+    </div>
+    
 
-        <div class = "wheelcolorpicker">
-            <h4>
-                Color
-            </h4>
-            <p>
-                <span class="color-preview-box" id="color-picker-pb"></span>
-            </p>
-            <p>
-                <input
-                id="color-block"
-                type="text"
-                value="#ff8800"
-                data-wheelcolorpicker
-                data-wcp-format="hex"
-                data-wcp-layout="block"
-                data-wcp-sliders="wsvap"
-                data-wcp-cssClass="color-block"
-                data-wcp-autoResize="false"
-            />
-            </p>
-            <style type="text/css">
-                .color-block {
-                max-width: 340px;
-                width: 100%;
-                box-sizing: border-box;
-                }
-                .color-preview-box {
-                display: inline-block;
-                width: .75em;
-                height: .75em;
-                vertical-align: middle;
-                padding: 2px;
-                background-clip: content-box;
-                border: solid 1px #888;
-                }
-            </style>
-            <script type="text/javascript">
-                $(function() {
-                  $('#color-block').on('colorchange', function(e) {
-                    var color = $(this).wheelColorPicker('value');
-                    $('.color-preview-box').css('background-color', color);
-                  });
-                });
-            </script>
-        </div>
-        
+    <script src="javascript/mqttClient.js"></script>
+</body>
 
-        <!-- <div class="lightedLeds">
-            <h4>
-                Chooes LED stripe Borders
-            </h4>
-            <div slider id="slider-distance" onchange="sliderDistanceOnChange()">
-                <div>
-                  <div inverse-left id="inverse-left"></div>
-                  <div inverse-right id="inverse-right"></div>
-                  <div range id="range"></div>
-                  <span thumb id="thumb1"></span>
-                  <span thumb id="thumb2"></span>
-                  <div sign id="sign1">
-                    <span id="value1"></span>
-                  </div>
-                  <div sign id="sign2">
-                    <span id="value2"></span>
-                  </div>
-                </div>
-                <input type="range" tabindex="0" value="1" max="3" min="1" step="1" id="led-range-min"/>
-                <input type="range" tabindex="0" value="3" max="3" min="1" step="1" id="led-range-min"/>
-              </div>
-        </div> -->
-
-        <script src="javascript/mqttClient.js"></script>
-    </body>
 </html>
