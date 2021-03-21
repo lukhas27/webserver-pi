@@ -140,6 +140,12 @@ function onMessageArrived(message) {
     case topic.BALKON_LEDS_COLOR:
         ledColorArrived(message.payloadString);
       break;
+    case topic.BALKON_LEDS_RANGE_MIN:
+      ledRangeMinArrived(message.payloadString);
+    break;
+    case topic.BALKON_LEDS_RANGE_MAX:
+      ledRangeMaxArrived(message.payloadString);
+    break;
   }
   console.log("Message arrived [" + message.destinationName + "]:\t" + message.payloadString);
 }
