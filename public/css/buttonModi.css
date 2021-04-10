@@ -1,0 +1,21 @@
+.button-modi {
+	background-color: #88a029;
+	color: white;
+	margin: 0px 10px;
+	padding: 10px 25px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	transition-duration: 0.4s;
+	font-size: 20px;
+	border-radius: 12px;
+	opacity: 0.4;
+}
+
+.button-modi:hover {
+	border-radius: 20px;
+}
+
+*:focus{
+	outline: none;
+}
