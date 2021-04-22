@@ -11,8 +11,7 @@ const topic = {
   BALKON_LEDS_COLOR: "balkon/leds/color",
   BALKON_LEDS_BRIGHTNESS: "balkon/leds/brightness",
   BALKON_LEDS_MODE: "balkon/leds/mode",
-  BALKON_LEDS_RANGE_MIN: "balkon/leds/range/min",
-  BALKON_LEDS_RANGE_MAX: "balkon/leds/range/max",
+  BALKON_LEDS_RANGE: "balkon/leds/range",
   BALKON_LEDS_SPEEDFACTOR: "balkon/leds/speedfactor",
   BALKON_LEDS_STATUS: "balkon/leds/status",
 };
@@ -23,8 +22,7 @@ const subTopics = [
   topic.BALKON_LEDS_COLOR,
   topic.BALKON_LEDS_BRIGHTNESS,
   topic.BALKON_LEDS_MODE,
-  topic.BALKON_LEDS_RANGE_MIN,
-  topic.BALKON_LEDS_RANGE_MAX,
+  topic.BALKON_LEDS_RANGE,
   topic.BALKON_LEDS_SPEEDFACTOR,
 ];
 
@@ -55,24 +53,10 @@ var button3 = document.getElementById("mode-3");
 
 // wheel color picker
 var colorPicker = document.getElementById("color-block");
+var colorBox = document.getElementById("colorbox");
 
 // leds range
-var setting = {
-  roots: document.querySelector(".my-js-slider"),
-  limits: { minLimit: 0, maxLimit: 29 },
-  rangeValue: { minValue: 0, maxValue: 29 },
-  valueNoteDisplay: true,
-  type: "range",
-  step: 1,
-};
-
-var rangeSlider = wRunner(setting); // inizialies range slider
-
-// init range values
-var ledRangeMin = 0;
-var ledRangeMax = 29;
-var ledRangeMinOld = 0;
-var ledRangeMaxOld = 29;
+var ledRange = document.getElementById("leds-range");
 
 // speedfactor
 var sliderSpeedfactor = document.getElementById("slider-speedfactor");
@@ -113,19 +97,16 @@ colorPicker.oncolorchange = function () {
   publish(topic.BALKON_LEDS_COLOR, colorPicker.value);
 };
 
-// 2 point range slider
-rangeSlider.onValueUpdate(function (values) {
-  ledRangeMin = values.minValue;
-  ledRangeMax = values.maxValue;
-  
-  publish(topic.BALKON_LEDS_RANGE_MIN, String(ledRangeMin));
-  publish(topic.BALKON_LEDS_RANGE_MAX, String(ledRangeMax));
-});
-
 // slider speedfactor
 sliderSpeedfactor.oninput = function () {
   publish(topic.BALKON_LEDS_SPEEDFACTOR, sliderSpeedfactor.value);
 };
+
+// range
+ledRange.oninput = function () {
+  publish(topic.BALKON_LEDS_RANGE, ledRange.value);
+}
+
 
 /*********************************************************
  * MQTT Functions
@@ -165,11 +146,8 @@ function onMessageArrived(message) {
     case topic.BALKON_LEDS_COLOR:
       ledColorArrived(message.payloadString);
       break;
-    case topic.BALKON_LEDS_RANGE_MIN:
-      ledRangeMinArrived(message.payloadString);
-      break;
-    case topic.BALKON_LEDS_RANGE_MAX:
-      ledRangeMaxArrived(message.payloadString);
+    case topic.BALKON_LEDS_RANGE:
+      ledRangeArrived(message.payloadString);
       break;
     case topic.BALKON_LEDS_SPEEDFACTOR:
       ledSpeedfactorArrived(message.payloadString);
@@ -220,7 +198,7 @@ function ledBrightnessArrived(payload) {
 
 function ledModeArrived(payload) {
   mode = parseInt(payload);
-  switch(mode){
+  switch (mode) {
     case 0:
       document.getElementById("mode-1").style.opacity = 1;
       document.getElementById("mode-2").style.opacity = 0.4;
@@ -242,36 +220,13 @@ function ledModeArrived(payload) {
 function ledColorArrived(payload) {
   colorPicker.value = payload;
   colorPicker.color = payload;
-}
-
-function ledRangeMinArrived(payload) {
-  /* ledRangeMin = payload;
-
-  if (ledRangeMax - ledRangeMin > 2) {
-    if (ledRangeMin != ledRangeMinOld) {
-      rangeSlider.setRangeValue({
-        minValue: ledRangeMin,
-        maxValue: ledRangeMax,
-      });
-    }
-    ledRangeMinOld = ledRangeMin;
-  } */
-}
-
-function ledRangeMaxArrived(payload) {
-  /* ledRangeMax = payload;
-  
-  if (ledRangeMax - ledRangeMin > 2) {
-    if (ledRangeMax != ledRangeMaxOld) {
-      rangeSlider.setRangeValue({
-        minValue: ledRangeMin,
-        maxValue: ledRangeMax,
-      });
-    }
-  }
-  ledRangeMaxOld = ledRangeMax; */
+  colorBox.style.backgroundColor = "#" + payload;
 }
 
 function ledSpeedfactorArrived(payload) {
   sliderSpeedfactor.value = payload;
+}
+
+function ledRangeArrived(payload) {
+  ledRange.value = payload;
 }

@@ -1,11 +1,14 @@
-.button-color {
+.colorbox {
+	float: left;
 	background-color: white;
 	margin: 0px 10px;
-	padding: 25px;
+	width: 30px;
+	height: 195px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
 	border-radius: 10px;
+	cursor: default;
 }
 
 *:focus{

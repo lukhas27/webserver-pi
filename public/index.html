@@ -1,105 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <script src="javascript/paho-mqtt/paho-mqtt.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="javascript/wheelcolor-picker/jquery.wheelcolorpicker.js"></script>
-    <script type="text/javascript" src="javascript/2pr-slider/wrunner-native.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/wheelcolorpicker.css" />
-    <link rel="stylesheet" type="text/css" href="css/buttonColor.css">
-    <link rel="stylesheet" type="text/css" href="css/buttonModi.css">
-    <link rel="stylesheet" type="text/css" href="css/rangeSlider.css">
-    <link rel="stylesheet" type="text/css" href="css/wrunner-default-theme.css">
-    <!-- <link rel="stylesheet" type="text/css" href="css/rangeSlider2Point.css"> -->
-    <link rel="stylesheet" type="text/css" href="css/toggleOnOff.css">
-    <title>MQTT Control</title>
-</head>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="javascript/wheelcolor-picker/jquery.wheelcolorpicker.js"
+    ></script>
 
-<body style="background-image: url('images/website-background.jpg');">
+    <link rel="stylesheet" type="text/css" href="css/wheelcolorpicker.css" />
+    <link rel="stylesheet" type="text/css" href="css/colorbox.css" />
+    <link rel="stylesheet" type="text/css" href="css/buttonModi.css" />
+    <link rel="stylesheet" type="text/css" href="css/rangeSlider.css" />
+    <link rel="stylesheet" type="text/css" href="css/ledRange.css" />
+    <link rel="stylesheet" type="text/css" href="css/toggleOnOff.css" />
+    
+    <title>MQTT Control</title>
+  </head>
+
+  <body style="background-image: url('images/website-background.jpg')">
     <div class="toggleOnOff">
-        <h4 style="color: white";>
-            Toggle LEDs
-        </h4>
-        <label class="switch">
-            <input class="switch-input" type="checkbox" id="switch-OnOff" />
-            <span class="switch-label" data-on="On" data-off="Off"></span>
-            <span class="switch-handle"></span>
-        </label>
+      <h4 style="color: white" ;>Toggle LEDs</h4>
+      <label class="switch">
+        <input class="switch-input" type="checkbox" id="switch-OnOff" />
+        <span class="switch-label" data-on="On" data-off="Off"></span>
+        <span class="switch-handle"></span>
+      </label>
     </div>
 
     <div class="brightness">
-        <h4 style="color: white";>
-            Brightness
-        </h4>
-        <input type="range" min="0" max="100" value="50" class="slider" id="slider-brightness">
+      <h4 style="color: white" ;>Brightness</h4>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        class="slider"
+        id="slider-brightness"
+      />
     </div>
 
     <div class="modi">
-        <h4 style="color: white";>
-            Modi
-        </h4>
-        <button class="button-modi" style="opacity: 1;" type="button" id="mode-1">
-            1
-        </button>
+      <h4 style="color: white" ;>Modi</h4>
+      <button class="button-modi" style="opacity: 1" type="button" id="mode-1">
+        1
+      </button>
 
-        <button class="button-modi" type="button" id="mode-2">
-            2
-        </button>
+      <button class="button-modi" type="button" id="mode-2">2</button>
 
-        <button class="button-modi" type="button" id="mode-3">
-            3
-        </button>
+      <button class="button-modi" type="button" id="mode-3">3</button>
     </div>
 
     <div class="wheelcolorpicker">
-        <h4 style="color: white";>
-            Color
-        </h4>
-        <input id="color-block" type="text" value="#ff8800" data-wheelcolorpicker="" data-wcp-format="css" data-wcp-layout="block" data-wcp-sliders="wsvap" data-wcp-cssclass="color-block" data-wcp-autoresize="false">
-        <button class="button-color"></button>
+      <h4 style="color: white" ;>Color</h4>
+      <input
+        id="color-block"
+        type="text"
+        value="#ff8800"
+        data-wheelcolorpicker=""
+        data-wcp-format="hex"
+        data-wcp-layout="block"
+        data-wcp-sliders="wsvap"
+        data-wcp-cssclass="color-block"
+        data-wcp-autoresize="false"
+      />
+      <input type="text" class="colorbox" id="colorbox" readonly="readonly"></input>
+
+      <script type="text/javascript">
+        $(function() {
+          $('#color-block').on('colorchange', function(e) {
+            var color = $(this).wheelColorPicker('value');
+            $('.textbox').css('background-color', '#' + color);
+          });
+        });
+        </script>
     </div>
 
     <div class="speedfactor">
-        <h4 style="color: white";>
-            Speedfactor
-        </h4>
-        <input type="range" min="0" max="100" value="20" class="slider" id="slider-speedfactor">
+      <h4 style="color: white" ;>Speedfactor</h4>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="20"
+        class="slider"
+        id="slider-speedfactor"
+      />
     </div>
 
     <div class="leds-range">
-        <br>
-        <div>
-            <h4 style="color: white";> 
-                LEDs Range
-            </h4>
-        </div>
+      <h4 style="color: white" ;>LED range</h4>
+      <input
+        type="range"
+        min="0"
+        max="15"
+        value="10"
+        class="ledrange"
+        id="leds-range"
+      />
     </div>
-    
 
     <script src="javascript/mqttClient.js"></script>
-</body>
-
+  </body>
 </html>
-
-<!-- <div slider id="slider-distance">
-          <div>
-            <div inverse-left style="width:70%;" id="inverse-left"></div>
-            <div inverse-right style="width:70%;" id="inverse-right"></div>
-            <div range style="left:0%;right:0%;" id="range-style"></div>
-            <span thumb style="left:0%;" id="thumb-left"></span>
-            <span thumb style="left:100%;" id="thumb-right"></span>
-            <div sign style="left:0%;" id="sign-left">
-              <span id="value">0</span>
-            </div>
-            <div sign style="left:100%;" id="sign-left">
-              <span id="value">29</span>
-            </div>
-          </div>
-          <input type="range" tabindex="1" value="0" max="29" min="0" step="1" id="range-min"/>
-         
-          <input type="range" tabindex="1" value="29" max="29" min="0" step="1" id="range-max"/>
-        </div> -->
