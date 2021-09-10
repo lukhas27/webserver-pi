@@ -50,6 +50,7 @@ var sliderBrightness = document.getElementById("slider-brightness");
 var button1 = document.getElementById("mode-1");
 var button2 = document.getElementById("mode-2");
 var button3 = document.getElementById("mode-3");
+var button4 = document.getElementById("mode-4");
 
 // wheel color picker
 var colorPicker = document.getElementById("color-block");
@@ -90,6 +91,10 @@ button2.onclick = function () {
 
 button3.onclick = function () {
   publish(topic.BALKON_LEDS_MODE, String(2));
+};
+
+button4.onclick = function () {
+  publish(topic.BALKON_LEDS_MODE, String(3));
 };
 
 // color picker
@@ -203,16 +208,25 @@ function ledModeArrived(payload) {
       document.getElementById("mode-1").style.opacity = 1;
       document.getElementById("mode-2").style.opacity = 0.4;
       document.getElementById("mode-3").style.opacity = 0.4;
+      document.getElementById("mode-4").style.opacity = 0.4;
       break;
     case 1:
       document.getElementById("mode-1").style.opacity = 0.4;
       document.getElementById("mode-2").style.opacity = 1;
       document.getElementById("mode-3").style.opacity = 0.4;
+      document.getElementById("mode-4").style.opacity = 0.4;
       break;
     case 2:
       document.getElementById("mode-1").style.opacity = 0.4;
       document.getElementById("mode-2").style.opacity = 0.4;
       document.getElementById("mode-3").style.opacity = 1;
+      document.getElementById("mode-4").style.opacity = 0.4;
+      break;
+    case 3:
+      document.getElementById("mode-1").style.opacity = 0.4;
+      document.getElementById("mode-2").style.opacity = 0.4;
+      document.getElementById("mode-3").style.opacity = 0.4;
+      document.getElementById("mode-4").style.opacity = 1;
       break;
   }
 }
